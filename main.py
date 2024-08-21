@@ -59,22 +59,50 @@ def check_resource(drink_name):
     # after previous purchase subtract from current resource
 def Make_coffee(drink_name):
   current_order = MENU[drink_name]['ingredients']
+  current_order - resources
+
   return current_order
 
+#TODO5. Process coins.
+def process_coins(drink_name):
+    
+    correct_coins = False
+
+    while not correct_coins:
+      required_price = MENU[drink_name]['cost']
+      print('Please insert coins.')
+      quarter= int(input('How many quarters?:'))
+      dimes = int(input('How many dimes?:'))
+      nickles = int(input('How many nickles?:'))
+      pennies = int(input('How many pennies?:'))
+
+      if required_price == quarter + dimes + nickles + pennies:
+        print("Correct amount")
+        correct_coins = True
+      elif required_price > quarter + dimes + nickles + pennies: 
+        print('Sorry not enough money. Money refunded ')
+      else: 
+        print ('Please takes your change')
+        correct_coins = True
+    
+  #if quarters , dimes, nickles & pennies == required_price continue else print "Sorry not enough money.money refunded" or "your chagne is X"
 
 while machine_is_on:
 #TODO1. Prompt user by asking “​What would you like? (espresso/latte/cappuccino):”​
   User_request = input('what would you like to drink? espresso/latte/cappuccino: ').lower()
   if User_request == 'espresso': 
     if check_resource(User_request) == True:
+       process_coins(User_request)
        Make_coffee(User_request)
        print('making espresso...')
   elif User_request == 'latte':
     if check_resource(User_request) == True:
+      process_coins(User_request)
       Make_coffee(User_request)
       print('making a latte...') 
   elif User_request == 'cappuccino':
     if check_resource(User_request) == True:
+      process_coins(User_request)
       Make_coffee(User_request)
       print('making a cappuccino...') 
 
@@ -89,14 +117,7 @@ while machine_is_on:
 
 
     
-#TODO5. Process coins.
-def process_coins(drink_name):
-    required_price = MENU[drink_name]['cost']
-    print('Please insert coins.')
-    input('How many quarters?: /n')
-    input('How many dimes?:')
-    input('How many nickles?:')
-    input('How many pennies?:')
+
 
 
 #TODO6. Check transaction successful?
