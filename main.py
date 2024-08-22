@@ -31,6 +31,13 @@ resources = {
     "coffee": 100,
 }
 
+coinbase = {
+   "nickel":0.05 ,
+   "penny": 0.01,
+   "dime": 0.10,
+   "quarter": 0.25,
+}
+
 machine_is_on = True
 
 #TODO4. Check resources sufficient?
@@ -59,33 +66,46 @@ def check_resource(drink_name):
     # after previous purchase subtract from current resource
 def Make_coffee(drink_name):
   current_order = MENU[drink_name]['ingredients']
-  current_order - resources
+  #for loop that iterates through the ingretiates and for each ingrediate take away from resource
+  for ingredient, amount in current_order.items():
+     resources[ingredient] -= amount
 
-  return current_order
+  return resources
 
 #TODO5. Process coins.
 def process_coins(drink_name):
-    
+
+    required_price = MENU[drink_name]['cost']
     correct_coins = False
 
     while not correct_coins:
-      required_price = MENU[drink_name]['cost']
-      print('Please insert coins.')
-      quarter= int(input('How many quarters?:'))
-      dimes = int(input('How many dimes?:'))
-      nickles = int(input('How many nickles?:'))
-      pennies = int(input('How many pennies?:'))
+      quantities = {}
 
-      if required_price == quarter + dimes + nickles + pennies:
-        print("Correct amount")
-        correct_coins = True
-      elif required_price > quarter + dimes + nickles + pennies: 
-        print('Sorry not enough money. Money refunded ')
+      for coin in coinbase.keys():
+        quantity = float(input(f"How many {coin}s?:"))
+        quantities[coin] = quantity
+      
+      total_paid = 0
+
+      for coin,value in coinbase.items():
+        coin_total = value * quantities[coin]
+        total_paid += coin_total
+        print(f"The value inserted of {quantities[coin]} {coin}(s) is ${coin_total:.2f}")
+
+      print(f"\nThe total inserted is ${total_paid:.2f}")     
+      
+      if required_price == total_paid:
+          print("Correct amount")
+          correct_coins = True
+          return total_paid
+      elif required_price > total_paid: 
+          print('Sorry not enough money. Money refunded ')
       else: 
-        print ('Please takes your change')
-        correct_coins = True
-    
-  #if quarters , dimes, nickles & pennies == required_price continue else print "Sorry not enough money.money refunded" or "your chagne is X"
+          change = total_paid - required_price
+          print (f'Please takes your change of ${change:.2f}.')
+          correct_coins = True
+          return total_paid
+      
 
 while machine_is_on:
 #TODO1. Prompt user by asking “​What would you like? (espresso/latte/cappuccino):”​
@@ -116,12 +136,6 @@ while machine_is_on:
      print(f' Water: {resources['water']}ml \n Milk: {resources["milk"]}ml \n Coffee: {resources['coffee']}ml')
 
 
-    
-
-
-
 #TODO6. Check transaction successful?
 
-
-
-# New line
+# Newline
